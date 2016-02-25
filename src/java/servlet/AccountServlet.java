@@ -13,16 +13,55 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package servlet;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import model.Account;
 
 /**
  * Provides an Account Balance and Basic Withdrawal/Deposit Operations
  */
 @WebServlet("/account")
 public class AccountServlet extends HttpServlet {
-    
+
+    private Account account;
+
+    public AccountServlet() {
+        this.account = new Account();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        response.setHeader("Cache-Control", "private, no-store, no-cache, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires",0);
+        double balance = account.getBalance();
+      
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        Set<String> keySet = request.getParameterMap().keySet();
+        PrintWriter p = response.getWriter(); {
+            if (keySet.contains("Withdraw")&&request.getParameter("Withdraw")!= null) {
+                account.withdraw(Double.parseDouble(request.getParameter("Withdraw")));
+            } else if (keySet.contains("Deposit")&&request.getParameter("Deposit")!= null) {
+                account.deposit(Double.parseDouble(request.getParameter("Deposit")));
+            } else if (keySet.contains("Close")&&"true".equals(request.getParameter("Close"))) {
+                account.close();
+            } else {
+                p.println("Error::no parameters");
+            }
+            doGet(request, response);
+    }
+    }
 }
