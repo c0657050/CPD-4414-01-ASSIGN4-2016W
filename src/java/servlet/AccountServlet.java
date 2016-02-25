@@ -50,7 +50,7 @@ public class AccountServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        PrintWriter p = response.getWriter();
+            PrintWriter p = response.getWriter();
         {
             if (request.getParameter("Withdraw") != null) {
                 account.withdraw(Double.parseDouble(request.getParameter("Withdraw")));
