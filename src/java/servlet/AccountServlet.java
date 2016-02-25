@@ -50,13 +50,13 @@ public class AccountServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException {
-        Set<String> keySet = request.getParameterMap().keySet();
+        
         PrintWriter p = response.getWriter(); {
-            if (keySet.contains("Withdraw")&&request.getParameter("Withdraw")!= null) {
+            if (request.getParameter("Withdraw")!= null) {
                 account.withdraw(Double.parseDouble(request.getParameter("Withdraw")));
-            } else if (keySet.contains("Deposit")&&request.getParameter("Deposit")!= null) {
+            } else if (request.getParameter("Deposit")!= null) {
                 account.deposit(Double.parseDouble(request.getParameter("Deposit")));
-            } else if (keySet.contains("Close")&&"true".equals(request.getParameter("Close"))) {
+            } else if ("true".equals(request.getParameter("Close"))) {
                 account.close();
             } else {
                 p.println("Error::no parameters");
